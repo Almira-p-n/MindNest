@@ -11,10 +11,10 @@ def main():
     while run:
         clear()
         print("=== MINDNEST ===")
-        print("1. MoodCheck") # dikasih arti
-        print("2. CalmBox")
-        print("3. DiaryAI")
-        print("4. CrisisMode")
+        print("1. MoodCheck (cek mood kamu)")
+        print("2. CalmBox (menu bantuan untuk menenangkan diri) ")
+        print("3. DiaryAI (curhat harian)")
+        print("4. CrisisMode (mode darurat mental)")
         print("5. Exit")
 
         pilihan = input("Pilih menu: ")

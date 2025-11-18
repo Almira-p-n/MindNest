@@ -68,101 +68,140 @@ def grounding():
     input("\nTekan enter untuk kembali...")
 
 
+def detect_emotion(user_text):
+    user_text = user_text.lower()
+
+    SENTIMENT_MAP = {
+        "sedih": "sedih",
+        "kecewa": "sedih",
+        "kehilangan": "sedih",
+        "hancur": "sedih",
+        
+        "capek": "lelah",
+        "lelah": "lelah",
+        "letih": "lelah",
+
+        "marah": "marah",
+        "kesel": "marah",
+        "benci": "marah",
+
+        "bingung": "bingung",
+        "gatau": "bingung",
+        "ga tau": "bingung",
+
+        "cemas": "cemas",
+        "takut": "cemas",
+        "khawatir": "cemas",
+
+        "senang": "senang",
+        "lega": "senang",
+    }
+
+    for keyword, emotion in SENTIMENT_MAP.items():
+        if keyword in user_text:
+            return emotion
+    
+    return "netral"
+
+
+def get_affirmation(emotion):
+    """
+    Afirmasi human-friendly berdasarkan emosi.
+    Tanpa library, variasi dijaga manual.
+    """
+
+    AFFIRM = {
+        "sedih": [
+            "Aku bisa ngerasain sedih yang kamu bawa. Itu bukan tanda kamu lemah—itu tandanya kamu manusia, dan kamu masih berjuang.",
+            "Sedihmu valid. Kamu sudah menahan banyak hal sendirian, dan itu bukan hal kecil.",
+        ],
+        "lelah": [
+            "Kalau kamu lelah, itu wajar. Kamu sudah melangkah sejauh ini meskipun rasanya berat.",
+            "Kelelahanmu bukan berarti kamu gagal—itu pertanda kamu sudah terlalu lama kuat sendirian.",
+        ],
+        "marah": [
+            "Marah itu wajar. Ada batas yang mungkin dilanggar, dan kamu berhak merasa begitu.",
+            "Emosi marahmu adalah sinyal dari diri sendiri bahwa ada yang gak beres di sekitarmu.",
+        ],
+        "bingung": [
+            "Rasa bingung itu manusiawi. Kamu lagi belajar memahami arah hidupmu, pelan-pelan aja.",
+            "Kadang hidup terasa abu-abu, tapi kamu tetap bisa melangkah sedikit demi sedikit.",
+        ],
+        "cemas": [
+            "Rasa cemas itu berat, tapi kamu nggak berjalan sendirian. Kamu masih bernapas, itu sudah bukti kekuatan.",
+            "Cemas bukan berarti kamu lemah. Itu cuma bukti kamu peduli banyak hal terlalu dalam.",
+        ],
+        "senang": [
+            "Senang baca kamu punya titik terang hari ini. Kamu pantas untuk ngerasain momen-momen ringan.",
+            "Perasaan senangmu itu berharga—nikmati sebentar, kamu layak bahagia.",
+        ],
+        "netral": [
+            "Makasih ya udah cerita. Nggak apa kalau belum tau apa yang kamu rasakan, kamu tetap berproses.",
+        ]
+    }
+
+    # pilih salah satu (manual pseudo-random)
+    options = AFFIRM[emotion]
+    idx = (len(options) * 7 + 3) % len(options)
+    return options[idx]
+
+
+def extract_keywords(text):
+    """
+    Ambil kata penting (manual).
+    Untuk rangkuman akhir.
+    """
+    words = text.split()
+    picked = []
+
+    for w in words:
+        if len(w) > 4:  # kata agak panjang biasanya penting
+            picked.append(w)
+        if len(picked) == 3:
+            break
+    
+    return picked
+
+
 def journaling_prompt():
-    clear()
-    print("=== JOURNALING PROMPT ===\n")
+    print("\n=== MODE JOURNALING — MindNest ===")
+    print("Tulis jawabanmu dengan jujur. Aku di sini bukan buat nilai kamu, tapi buat nemenin.\n")
 
-    print("Kita bakal journaling pelan-pelan ya…")
-    print("Jawab sesuai hatimu. Nggak harus panjang.\n")
-    input("Tekan enter untuk mulai...\n")
+    questions = [
+        "1. Apa yang paling mengganggu pikiranmu hari ini?",
+        "2. Kenapa hal itu membuatmu merasa seperti itu?",
+        "3. Hal kecil apa yang sebenarnya kamu butuhkan sekarang?"
+    ]
 
-    answers = {}
+    user_answers = []
 
-    # -------------------------------
-    #  PERTANYAAN 1
-    # -------------------------------
-    clear()
-    print("1. Apa yang paling berat buatmu hari ini?\n")
-    answers["berat"] = input("Jawabanmu: ")
-    print("\nMakasih ya sudah jujur sama dirimu sendiri.")
-    input("Tekan enter untuk lanjut...")
+    for q in questions:
+        print(q)
+        answer = input("Jawabanmu: ")
 
-    # -------------------------------
-    #  PERTANYAAN 2
-    # -------------------------------
-    clear()
-    print("2. Siapa atau apa yang membuatmu merasa aman?\n")
-    answers["aman"] = input("Jawabanmu: ")
-    print("\nMakasih ya udah cerita. Indah rasanya ketika kita punya sesuatu atau seseorang yang bisa bikin hati kita merasa aman.\n"
-        "Pegang perasaan itu baik-baik… karena rasa aman adalah tempat kita pulang waktu dunia terasa terlalu bising.\n" \
-        "Apa pun bentuknya, kamu pantas punya ruang yang bikin kamu tenang, didengar, dan diterima apa adanya.")
-    input("Tekan enter untuk lanjut...")
+        user_answers.append(answer)
 
-    # -------------------------------
-    #  PERTANYAAN 3
-    # -------------------------------
-    clear()
-    print("3. Hal apa yang ingin kamu lepaskan dari pikiranmu?\n")
-    answers["lepaskan"] = input("Jawabanmu: ")
-    print("\nTerima kasih sudah mau ngebuka sedikit isi kepala kamu… itu bukan hal yang gampang.\n" \
-        "Apa pun yang kamu coba lepaskan hari ini, aku tahu itu pasti punya rasa yang berat buat kamu.\n" \
-        "Tapi kamu berani ngomongin itu — dan keberanian kecil kayak gini sering jadi awal dari hati yang lebih ringan.\n" \
-        "Pelan-pelan aja… nggak harus kuat sempurna, cukup hadir sama perasaanmu.\n" \
-        "Aku di sini, dan kamu nggak lagi ngadepin ini sendirian.")
-    input("Tekan enter untuk lanjut...")
+        emotion = detect_emotion(answer)
+        affirmation = get_affirmation(emotion)
 
-    # -------------------------------
-    #  PERTANYAAN 4
-    # -------------------------------
-    clear()
-    print("4. Hal kecil apa yang berhasil kamu lakukan hari ini?\n")
-    answers["kecil"] = input("Jawabanmu: ")
-    print("\nItu keren banget, beneran. Kadang hal kecil justru yang paling berarti, karena dari situlah kita belajar bahwa kemajuan itu nggak selalu harus besar.\n" \
-        "Kamu nyempetin diri buat ngelakuin itu dan itu tanda kamu tetap bergerak, meski pelan.\n" \
-        "Banggain diri kamu sebentar… kamu layak ngerasain itu.")
-    input("Tekan enter untuk lanjut...")
+        print("\nAta:")
+        print(affirmation)
+        print("-" * 55)
 
-    # -------------------------------
-    #  PERTANYAAN 5
-    # -------------------------------
-    clear()
-    print("5. Perasaan apa yang paling dominan sekarang dan kenapa?\n")
-    answers["perasaan"] = input("Jawabanmu: ")
-    print("\nMakasih udah jujur sama perasaanmu.")
-    input("Tekan enter untuk lihat rangkuman...")
+    # ⬇ Rangkuman adaptif
+    print("\n=== Rangkuman untukmu ===")
+    print("Dari apa yang kamu ceritakan barusan, aku bisa lihat kalau kamu lagi menghadapi sesuatu yang nggak mudah.")
 
-    # -------------------------------
-    #  AFIRMASI AKHIR
-    # -------------------------------
-    clear()
-    print("=== RANGKUMAN & AFIRMASI ===\n")
+    print("\nBeberapa hal yang paling terasa dari ceritamu:")
+    for ans in user_answers:
+        kws = extract_keywords(ans)
+        if kws:
+            print("- " + " ".join(kws))
+    
+    print("\n=== Afirmasi Penutup ===")
+    print("Terima kasih sudah jujur sama dirimu sendiri barusan. Itu langkah besar.")
+    print("Kamu nggak harus kuat setiap hari cukup tetap bertahan satu langkah kecil aja.")
+    print("Apa pun yang kamu rasakan, kamu nggak sendiri, dan kamu jauh lebih kuat dari yang kamu pikirkan.")
 
-    print("Dari jawabanmu barusan…")
-    print("Aku bisa lihat kalau kamu lagi benar-benar mencoba memahami dirimu.\n")
-
-    # Analisis sederhana berdasarkan jawaban terakhir (perasaan)
-    final = answers["perasaan"].lower()
-
-    if any(x in final for x in ["sedih", "kecewa", "nangis", "capek", "lelah", "hancur"]):
-        print("Sepertinya kamu lagi nahan banyak hal… dan itu melelahkan.")
-        print("Tapi kamu masih berusaha berdiri, dan itu bukti kekuatanmu.")
-        print("Kamu nggak sendirian. Perasaan ini valid. Pelan-pelan ya.\n")
-
-    elif any(x in final for x in ["takut", "cemas", "anxiety", "khawatir", "bingung"]):
-        print("Kecemasan itu bukan salahmu. Pikiranmu cuma lagi penuh.")
-        print("Kamu aman sekarang. Tarik napas pelan… kamu masih di sini, dan kamu bertahan.\n")
-
-    elif any(x in final for x in ["senang", "bahagia", "lega", "tenang"]):
-        print("Aku ikut seneng dengernya. Kamu pantas bahagia.")
-        print("Semoga perasaan baik ini tetap tinggal di hatimu lebih lama.\n")
-
-    else:
-        print("Perasaanmu valid, walaupun sulit dijelaskan.")
-        print("Yang penting kamu udah berani untuk merasakannya.")
-        print("Itu langkah yang dewasa dan kuat.\n")
-
-    print("Terima kasih sudah mau journaling hari ini.")
-    print("Kamu sudah melakukan yang terbaik. Kamu pantas dan layak dipahami dan hidup di dunia ini.\n")
-    print("TERIMAKASIH SUDAH BERTAHAN!.\n")
-
-    input("Tekan enter untuk kembali...")
+    print("\nTekan ENTER untuk kembali...")
+    input()
