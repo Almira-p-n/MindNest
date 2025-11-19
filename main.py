@@ -3,7 +3,7 @@ import time
 from app.mood_checker import mood_check
 from app.diary_ai import diary_ai
 from app.calm_box import calm_menu
-from app.crisis_mode import crisis_mode
+from app.quotes import quotes
 from app.utils import clear
 
 def main():
@@ -14,7 +14,7 @@ def main():
         print("1. MoodCheck (cek mood kamu)")
         print("2. CalmBox (menu bantuan untuk menenangkan diri) ")
         print("3. DiaryAI (curhat harian)")
-        print("4. CrisisMode (mode darurat mental)")
+        print("4. Quotes (memberikan kata-kata)")
         print("5. Exit")
 
         pilihan = input("Pilih menu: ")
