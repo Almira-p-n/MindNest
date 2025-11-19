@@ -184,7 +184,6 @@ def journaling_prompt():
         emotion = detect_emotion(answer)
         affirmation = get_affirmation(emotion)
 
-        print("\nAta:")
         print(affirmation)
         print("-" * 55)
 
