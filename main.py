@@ -26,7 +26,7 @@ def main():
         elif pilihan == "3":
             diary_ai()
         elif pilihan == "4":
-            crisis_mode()
+            quotes()
         elif pilihan == "5":
             print("Terimakasih telah menggunakan MINDNEST!")
             time.sleep(2)
