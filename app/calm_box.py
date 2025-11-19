@@ -136,7 +136,7 @@ def get_affirmation(emotion):
             "Perasaan senangmu itu berharga—nikmati sebentar, kamu layak bahagia.",
         ],
         "netral": [
-            "Makasih ya udah cerita. Nggak apa kalau belum tau apa yang kamu rasakan, kamu tetap berproses.",
+            "Makasih ya udah cerita. Kamu harus tetap semangat untuk menjalani hari-hari kamu.",
         ]
     }
 
@@ -168,7 +168,7 @@ def journaling_prompt():
     print("Tulis jawabanmu dengan jujur. Aku di sini bukan buat nilai kamu, tapi buat nemenin.\n")
 
     questions = [
-        "1. Apa yang paling mengganggu pikiranmu hari ini?",
+        "1. Apa yang paling mengganggu pikiranmu hari ini? (misal: rasa sedih/rasa marah/dsb.)",
         "2. Kenapa hal itu membuatmu merasa seperti itu?",
         "3. Hal kecil apa yang sebenarnya kamu butuhkan sekarang?"
     ]
