@@ -1,7 +1,7 @@
 import random
 from app.utils import clear
 
-def crisis_mode():
+def quotes():
     clear()
     quotes = [
         "Tidak semua yang hilang harus dicari kembali.",
